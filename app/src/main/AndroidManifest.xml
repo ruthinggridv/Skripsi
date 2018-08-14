@@ -1,0 +1,74 @@
+<?xml version="1.0" encoding="utf-8"?>
+<manifest xmlns:android="http://schemas.android.com/apk/res/android"
+    package="com.example.gungde.reminder_medicine">
+
+    <uses-permission android:name="android.permission.WAKE_LOCK" />
+    <uses-permission android:name="android.permission.INTERNET" />
+
+    <application
+        android:allowBackup="true"
+        android:icon="@mipmap/ic_launcher"
+        android:label="@string/app_name"
+        android:roundIcon="@mipmap/ic_launcher_round"
+        android:supportsRtl="true"
+        android:theme="@style/AppTheme">
+        <activity
+            android:name=".MainActivity"
+            android:label="@string/app_name"
+            android:theme="@style/AppTheme.NoActionBar" />
+
+        <service
+            android:name=".utils.AlarmService"
+            android:enabled="true" />
+
+        <receiver android:name=".utils.AlarmReceiver" />
+
+        <activity
+            android:name=".Splash"
+            android:label="@string/title_activity_splash"
+            android:theme="@style/AppTheme.NoActionBar">
+            <intent-filter>
+                <action android:name="android.intent.action.MAIN" />
+
+                <category android:name="android.intent.category.LAUNCHER" />
+            </intent-filter>
+        </activity>
+        <activity
+            android:name=".Aturobat"
+            android:label="@string/title_activity_aturobat"
+            android:theme="@style/AppTheme.NoActionBar" />
+        <activity
+            android:name=".Beranda"
+            android:label="@string/title_activity_beranda"
+            android:theme="@style/AppTheme.NoActionBar" />
+        <activity
+            android:name=".Menu"
+            android:label="@string/title_activity_menu"
+            android:theme="@style/AppTheme.NoActionBar" />
+        <activity
+            android:name=".Login"
+            android:label="@string/title_activity_login"
+            android:theme="@style/AppTheme.NoActionBar" />
+        <activity
+            android:name=".Daftar"
+            android:label="@string/title_activity_daftar"
+            android:theme="@style/AppTheme.NoActionBar" />
+        <activity
+            android:name=".Report"
+            android:label="@string/title_activity_report"
+            android:theme="@style/AppTheme.NoActionBar" />
+        <activity
+            android:name=".Minumobat"
+            android:label="@string/title_activity_minumobat"
+            android:theme="@style/AppTheme.NoActionBar" />
+        <activity
+            android:name=".Reward"
+            android:label="@string/title_activity_reward"
+            android:theme="@style/AppTheme.NoActionBar" />
+        <activity
+            android:name=".Badreward"
+            android:label="@string/title_activity_badreward"
+            android:theme="@style/AppTheme.NoActionBar"></activity>
+    </application>
+
+</manifest>

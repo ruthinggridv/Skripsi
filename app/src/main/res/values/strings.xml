@@ -1,0 +1,21 @@
+<resources>
+    <string name="app_name">PatuhOAT</string>
+    <string name="action_settings">Settings</string>
+    <string name="title_activity_splash">Obat</string>
+    <string name="title_activity_aturobat">Pengaturan Pegingat</string>
+    <string name="title_activity_beranda">PatuhOAT</string>
+    <string name="title_activity_menu">Menu</string>
+    <string name="title_activity_login">Masuk</string>
+    <string name="title_activity_daftar">Daftar</string>
+
+    <string-array name="kategori">
+        <item>- Pilih Kategori -</item>
+        <item>Pasien</item>
+        <item>Keluarga</item>
+        <item>Dokter</item>
+    </string-array>
+    <string name="title_activity_report">Laporan Kepatuhan</string>
+    <string name="title_activity_minumobat">PatuhOAT</string>
+    <string name="title_activity_reward">Reward</string>
+    <string name="title_activity_badreward">Badreward</string>
+</resources>
