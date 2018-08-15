@@ -27,7 +27,7 @@ public interface GetDataService {
 
     @FormUrlEncoded
     @POST("public/login")
-    Call<LoginModel> LoginUser(@Field("username") String username,
+    Call<LoginModel> LoginUser(@Field("email") String email,
                                @Field("password") String password);
 
     @FormUrlEncoded
@@ -37,7 +37,8 @@ public interface GetDataService {
                              @Field("jlh_maks") String jlh_maks,
                              @Field("jlh_obat") String jlh_obat,
                              @Field("catatan") String catatan,
-                             @Field("waktu_akhir") String waktu_akhir);
+                             @Field("waktu_akhir") String waktu_akhir,
+                             @Field("waktu_alarm") String waktu_alarm);
 
     @GET("public/getobat/{id_user}")
     Call<DataObat> getObat(@Path("id_user") String id_user);

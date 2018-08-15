@@ -5,6 +5,7 @@ import com.google.gson.annotations.SerializedName;
 
 public class InputObat {
 
+
     @Expose
     @SerializedName("id_obat")
     private String id_obat;

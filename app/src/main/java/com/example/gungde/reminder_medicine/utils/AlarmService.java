@@ -38,6 +38,7 @@ public class AlarmService extends IntentService {
         Intent i = new Intent(this, Minumobat.class);
         i.putExtra("id_obatt", id_obat);
         i.putExtra("jlh_makss", jlh_maks);
+        i.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
         this.startActivity(i);
 
         PendingIntent contentIntent = PendingIntent.getActivity(this, 0,

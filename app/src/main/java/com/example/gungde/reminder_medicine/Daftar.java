@@ -1,7 +1,9 @@
 package com.example.gungde.reminder_medicine;
 
 import android.app.ProgressDialog;
+import android.content.Context;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.design.widget.TextInputLayout;
@@ -263,15 +265,27 @@ public class Daftar extends AppCompatActivity implements AdapterView.OnItemSelec
         call.enqueue(new Callback<Base>() {
             @Override
             public void onResponse(Call<Base> call, Response<Base> response) {
+                Base resp = response.body();
                 if (response.isSuccessful()) {
                     Toast.makeText(Daftar.this, "Berhasil", Toast.LENGTH_SHORT).show();
                     /*startActivity(new Intent(Daftar.this, Login.class));
                     finish();*/
                     mpProgressDialog.dismiss();
-                    Intent intent = new Intent(Daftar.this, MainActivity.class);
+                    /*Intent intent = new Intent(Daftar.this, MainActivity.class);
                     intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
                     startActivity(intent);
-                    finish();
+                    finish();*/
+                    SharedPreferences pref = getSharedPreferences("medical", Context.MODE_PRIVATE);
+                    SharedPreferences.Editor editor = pref.edit();
+                    editor.putBoolean("isRegist", true);
+                    editor.putString("id_user", resp.getData().getId_user());
+                    editor.putString("username", resp.getData().getUsername());
+                    editor.putString("email", resp.getData().getEmail());
+                    editor.putString("nohp", resp.getData().getNohp());
+                    editor.putString("kategori", resp.getData().getKategori());
+                    editor.putString("password", resp.getData().getPassword());
+                    editor.apply();
+                    Toast.makeText(Daftar.this, "Berhasil", Toast.LENGTH_SHORT).show();
                 } else {
                     Toast.makeText(Daftar.this, "Gagal", Toast.LENGTH_SHORT).show();
                 }

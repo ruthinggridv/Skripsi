@@ -13,6 +13,8 @@ import android.view.MenuItem;
 import android.widget.FrameLayout;
 import android.widget.Toast;
 
+import com.example.gungde.reminder_medicine.ActivityChats.AcountSettings;
+import com.example.gungde.reminder_medicine.ActivityChats.AllUserActivity;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
@@ -131,13 +133,13 @@ public class MainActivity extends AppCompatActivity {
             FirebaseAuth.getInstance().signOut();
             sendTostart();
         } else if (item.getItemId() == R.id.acount_setting_main) {
-            /*Intent i = new Intent(MainActivity.this, AcountSettings.class);
-            *//* i.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);*//*
-            startActivity(i);*/
+            Intent i = new Intent(MainActivity.this, AcountSettings.class);
+            /* i.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);*/
+            startActivity(i);
         } else if (item.getItemId() == R.id.All_user) {
-           /* Intent i = new Intent(MainActivity.this, AllUserActivity.class);
+            Intent i = new Intent(MainActivity.this, AllUserActivity.class);
             // i.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
-            startActivity(i);*/
+            startActivity(i);
 
         }
         return true;

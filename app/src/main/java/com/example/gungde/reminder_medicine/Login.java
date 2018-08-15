@@ -109,7 +109,7 @@ public class Login extends AppCompatActivity {
                     /* ======== Call method Login with email && password ========*/
 
 
-                    loginUser(email,password);
+                    loginUserfirebase(email,password);
 
                 }else {
                     mpProgressDialog.hide();
@@ -134,7 +134,7 @@ public class Login extends AppCompatActivity {
     }
 
     //METHOD FOR LOGIN WiTH EMAIL && PASSWORD FIREBASE
-    private void loginUser(final String email, final String password) {
+    private void loginUserfirebase(final String email, final String password) {
         mAuth.signInWithEmailAndPassword(email,password).addOnCompleteListener(new OnCompleteListener<AuthResult>() {
             @Override
             public void onComplete(@NonNull Task<AuthResult> task) {
@@ -168,17 +168,17 @@ public class Login extends AppCompatActivity {
 
 
     //LOGIN METHOD CUSTOM API
-    public void login(String email,String password) {
+    public void login(final String username, final String password) {
 
             GetDataService api = RetrofitClientInstance.getRetrofitInstance().create(GetDataService.class);
-            Call<LoginModel> call = api.LoginUser(email, password);
+            Call<LoginModel> call = api.LoginUser(username, password);
 
             call.enqueue(new Callback<LoginModel>() {
                 @Override
                 public void onResponse(Call<LoginModel> call, Response<LoginModel> response) {
                     mpProgressDialog.dismiss();
                     LoginModel resp = response.body();
-                    if (resp.getStatus().equals("true")) {
+                    if (response.isSuccessful()) {
                         mpProgressDialog.dismiss();
                         SharedPreferences pref = getSharedPreferences("medical", Context.MODE_PRIVATE);
                         SharedPreferences.Editor editor = pref.edit();
@@ -199,6 +199,7 @@ public class Login extends AppCompatActivity {
                         finish();*/
                     } else {
                         Toast.makeText(Login.this, "username atau password salah!", Toast.LENGTH_SHORT).show();
+                        Toast.makeText(Login.this, ""+username+","+password, Toast.LENGTH_SHORT).show();
                     }
 
                 }
