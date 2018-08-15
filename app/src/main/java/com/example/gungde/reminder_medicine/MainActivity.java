@@ -1,224 +1,152 @@
 package com.example.gungde.reminder_medicine;
 
-import android.app.AlarmManager;
-import android.app.PendingIntent;
-import android.app.ProgressDialog;
-import android.app.TimePickerDialog;
-import android.content.Context;
 import android.content.Intent;
-import android.content.SharedPreferences;
+import android.support.annotation.NonNull;
+import android.support.design.widget.BottomNavigationView;
+import android.support.v4.app.Fragment;
+import android.support.v4.app.FragmentTransaction;
+import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
-import android.os.SystemClock;
 import android.support.v7.widget.Toolbar;
-import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
-import android.widget.Button;
-import android.widget.EditText;
-import android.widget.LinearLayout;
-import android.widget.TimePicker;
+import android.widget.FrameLayout;
 import android.widget.Toast;
 
-import com.example.gungde.reminder_medicine.model.InputObat;
-import com.example.gungde.reminder_medicine.model.LoginModel;
-import com.example.gungde.reminder_medicine.network.GetDataService;
-import com.example.gungde.reminder_medicine.network.RetrofitClientInstance;
-import com.example.gungde.reminder_medicine.utils.AlarmReceiver;
-import com.example.gungde.reminder_medicine.utils.BaseActivity;
+import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.database.DatabaseReference;
+import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.database.ServerValue;
 
-import java.text.ParseException;
-import java.text.SimpleDateFormat;
-import java.util.Calendar;
-import java.util.Date;
+public class MainActivity extends AppCompatActivity {
 
-import butterknife.BindView;
-import butterknife.ButterKnife;
-import butterknife.OnClick;
-import retrofit2.Call;
-import retrofit2.Callback;
-import retrofit2.Response;
+    private FrameLayout mFrameLayout;
 
-public class MainActivity extends BaseActivity {
+    //FRAGMENT NAVIGATION
+    private Beranda beranda;
+    private Artikel artikel;
+    private Chats chats;
+    private Settings settings;
 
-    ProgressDialog progressDoalog;
-    @BindView(R.id.toolbar)
-    Toolbar toolbar;
-    @BindView(R.id.txtJudul)
-    EditText txtJudul;
-    @BindView(R.id.txtCatatan)
-    EditText txtCatatan;
-    @BindView(R.id.txtSisa)
-    EditText txtSisa;
-    @BindView(R.id.txtJlh_maks)
-    EditText txtJlh_maks;
-    @BindView(R.id.edtTime1)
-    EditText edtTime1;
-    @BindView(R.id.btnTime1)
-    Button btnTime1;
-    @BindView(R.id.bg1)
-    LinearLayout bg1;
-    @BindView(R.id.bg2)
-    LinearLayout bg2;
-    @BindView(R.id.btnAdd)
-    Button btnAdd;
-    @BindView(R.id.btnOut)
-    Button btnOut;
-    @BindView(R.id.txtWaktu)
-    EditText txtWaktu;
+    private Toolbar mToolbar;
+
+    //Method set freame onselectef Navigation
+    private BottomNavigationView.OnNavigationItemSelectedListener mOnNavigationItemSelectedListener
+            = new BottomNavigationView.OnNavigationItemSelectedListener() {
+
+        @Override
+        public boolean onNavigationItemSelected(@NonNull MenuItem item) {
+            switch (item.getItemId()) {
+                case R.id.navigation_home:
+                    setFragment(beranda);
+                    return true;
+
+                case R.id.navigation_artikel:
+                    setFragment(artikel);
+                    return true;
+                case R.id.navigation_chats:
+                    setFragment(chats);
+                    return true;
+                case R.id.navigation_settings:
+                    setFragment(settings);
+                    return true;
 
 
-    private AlarmManager alarmManager;
-    private static MainActivity inst;
+
+
+            }
+            return false;
+        }
+    };
+    //fIREBASE
+    private FirebaseAuth mAuth;
+    private FirebaseAuth.AuthStateListener mAuthListener;
+    private DatabaseReference mUserRef;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
-        ButterKnife.bind(this);
-        setSupportActionBar(toolbar);
-        alarmManager = (AlarmManager) getSystemService(ALARM_SERVICE);
+        mFrameLayout = findViewById(R.id.main_frame);
 
-        progressDoalog = new ProgressDialog(MainActivity.this);
-        progressDoalog.setMessage("Loading....");
-    }
+        mToolbar = findViewById(R.id.maintoolbar);
+        setSupportActionBar(mToolbar);
+        getSupportActionBar().setTitle("Patuh OAT");
 
-
-    @Override
-    public void onStart() {
-        super.onStart();
-        inst = this;
-    }
-
-    public static MainActivity instance() {
-        return inst;
-    }
-
-    /*public void onSuccess(String time) {
-        presenter.sendNotif(time, edtNama.getText().toString());
-    }*/
-
-    private void setTimePicker(final EditText et) {
-        final Calendar c = Calendar.getInstance();
-        int mHour = c.get(Calendar.HOUR_OF_DAY);
-        int mMinute = c.get(Calendar.MINUTE);
-        TimePickerDialog timePickerDialog = new TimePickerDialog(this,
-                new TimePickerDialog.OnTimeSetListener() {
-                    @Override
-                    public void onTimeSet(TimePicker view, int hourOfDay,
-                                          int minute) {
-                        et.setText(String.format("%02d:%02d", hourOfDay, minute));
-                    }
-                }, mHour, mMinute, true);
-        timePickerDialog.show();
-    }
-
-    private void setAlarm(String id_obat) {
-        Calendar calendar = Calendar.getInstance();
-        String time = edtTime1.getText().toString();
-        calendar.setTimeInMillis(System.currentTimeMillis());
-        calendar.set(Calendar.HOUR_OF_DAY, Integer.parseInt(time.substring(0, 2)));
-        calendar.set(Calendar.MINUTE, Integer.parseInt(time.substring(3)));
-        calendar.set(Calendar.SECOND, 0);
+        //Getting Uid user
+        mAuth = FirebaseAuth.getInstance();
+        if (mAuth.getCurrentUser() != null) {
 
 
-        Intent myIntent = new Intent(MainActivity.this, AlarmReceiver.class);
-        myIntent.putExtra("id_obatt", id_obat);
-        myIntent.putExtra("jlh_makss", txtJlh_maks.getText().toString().trim());
-        PendingIntent pendingIntent = PendingIntent.getBroadcast(MainActivity.this, Integer.parseInt(id_obat), myIntent, 0);
-        alarmManager.set(AlarmManager.RTC, calendar.getTimeInMillis(), pendingIntent);
-        alarmManager.setInexactRepeating(AlarmManager.RTC_WAKEUP, calendar.getTimeInMillis(),
-                AlarmManager.INTERVAL_DAY, pendingIntent);
+            mUserRef = FirebaseDatabase.getInstance().getReference().child("Users").child(mAuth.getCurrentUser().getUid());
+
+        }
+
+        //Inisialisasi Frame Bottom navigation
+        beranda = new Beranda();
+        artikel = new Artikel();
+        chats = new Chats();
+        settings = new Settings();
+        setFragment(beranda);
+
+
+        //set bottom navigation method
+        BottomNavigationView navigation = (BottomNavigationView) findViewById(R.id.navigation);
+        navigation.setOnNavigationItemSelectedListener(mOnNavigationItemSelectedListener);
 
 
     }
-
-
-    @OnClick(R.id.btnTime1)
-    public void onChangeTime1() {
-        setTimePicker(edtTime1);
+    //Method set Fragment
+    private void setFragment(Fragment fragment) {
+        FragmentTransaction fragmentTransaction = getSupportFragmentManager().beginTransaction();
+        fragmentTransaction.replace(R.id.main_frame, fragment);
+        fragmentTransaction.commit();
     }
+    //MEthod backpressed to exit
+    long back_pressed;
 
+    public void onBackPressed(){
+        if (back_pressed + 2000 > System.currentTimeMillis()) super.onBackPressed();
+        else Toast.makeText(getBaseContext(), "Press once again to exit!", Toast.LENGTH_SHORT).show();
+        back_pressed = System.currentTimeMillis();
+    }
+    //Method panggil menu
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
-        // Inflate the menu; this adds items to the action bar if it is present.
-        getMenuInflater().inflate(R.menu.menu_main, menu);
+        super.onCreateOptionsMenu(menu);
+        getMenuInflater().inflate(R.menu.main_menu, menu);
+
+
         return true;
+
     }
 
+    //Method Menu selected
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
-        // Handle action bar item clicks here. The action bar will
-        // automatically handle clicks on the Home/Up button, so long
-        // as you specify a parent activity in AndroidManifest.xml.
-        int id = item.getItemId();
+        super.onOptionsItemSelected(item);
+        if (item.getItemId() == R.id.logout_menu_main) {
+            mUserRef.child("online").setValue(ServerValue.TIMESTAMP);
 
-        //noinspection SimplifiableIfStatement
-        if (id == R.id.action_settings) {
-            return true;
+            FirebaseAuth.getInstance().signOut();
+            sendTostart();
+        } else if (item.getItemId() == R.id.acount_setting_main) {
+            /*Intent i = new Intent(MainActivity.this, AcountSettings.class);
+            *//* i.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);*//*
+            startActivity(i);*/
+        } else if (item.getItemId() == R.id.All_user) {
+           /* Intent i = new Intent(MainActivity.this, AllUserActivity.class);
+            // i.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
+            startActivity(i);*/
+
         }
-
-        return super.onOptionsItemSelected(item);
+        return true;
     }
-
-    @OnClick(R.id.btnOut)
-    public void onViewClicked1() {
+    private void sendTostart() {
+        //Check i user is Sign-out
+        Intent startIntent = new Intent(MainActivity.this, Login.class);
+        startActivity(startIntent);
         finish();
-    }
 
-    public String getWaktuAkhir(int waktu_akhir) {
-        String inputPattern = "yyyy-MM-dd";
-        SimpleDateFormat sdf = new SimpleDateFormat(inputPattern);
-        String currentDate = sdf.format(Calendar.getInstance().getTime());
-        Calendar cal = Calendar.getInstance();
-        Date date;
-        String str = null;
-        try {
-            date = sdf.parse(currentDate);
-            cal.setTime(date);
-            cal.add(Calendar.DAY_OF_MONTH, waktu_akhir);
-            str = sdf.format(cal.getTime());
-        } catch (ParseException e) {
-            e.printStackTrace();
-        }
-        return str;
-    }
-
-    @OnClick(R.id.btnAdd)
-    public void onViewClicked() {
-        SharedPreferences pref = getSharedPreferences("medical", Context.MODE_PRIVATE);
-        String id_user = (pref.getString("id_user", "0"));
-        String judul = txtJudul.getText().toString().trim();
-        String jlh_maks = txtJlh_maks.getText().toString().trim();
-        String jlh_obat = txtSisa.getText().toString().trim();
-        String catatan = txtCatatan.getText().toString().trim();
-        String waktu_akhir = getWaktuAkhir(Integer.parseInt(txtWaktu.getText().toString().trim()));
-
-
-        if (judul.equals("") || jlh_maks.equals("") || jlh_obat.equals("") || catatan.equals("") || waktu_akhir.equals("")) {
-            Toast.makeText(this, "Pastikan semua data terisi!", Toast.LENGTH_SHORT).show();
-        } else {
-            GetDataService api = RetrofitClientInstance.getRetrofitInstance().create(GetDataService.class);
-            Call<InputObat> call = api.postObat(id_user, judul, jlh_maks, jlh_obat, catatan, waktu_akhir);
-            progressDoalog.show();
-            call.enqueue(new Callback<InputObat>() {
-                @Override
-                public void onResponse(Call<InputObat> call, Response<InputObat> response) {
-                    if (response.isSuccessful()) {
-                        Toast.makeText(MainActivity.this, "Berhasil", Toast.LENGTH_SHORT).show();
-                        setAlarm(response.body().getId_obat());
-                        finish();
-                    } else {
-                        Toast.makeText(MainActivity.this, "Gagal", Toast.LENGTH_SHORT).show();
-                    }
-                    progressDoalog.dismiss();
-                }
-
-                @Override
-                public void onFailure(Call<InputObat> call, Throwable t) {
-                    progressDoalog.dismiss();
-                    Log.e("ERROR", t.toString());
-                }
-            });
-        }
     }
 }

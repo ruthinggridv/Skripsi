@@ -4,7 +4,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context="com.example.gungde.reminder_medicine.MainActivity">
+    tools:context="com.example.gungde.reminder_medicine.Home">
 
     <android.support.design.widget.AppBarLayout
         android:layout_width="match_parent"
@@ -28,7 +28,7 @@
         android:orientation="vertical"
         android:padding="16dp"
         app:layout_behavior="@string/appbar_scrolling_view_behavior"
-        tools:context="com.example.gungde.reminder_medicine.MainActivity"
+        tools:context="com.example.gungde.reminder_medicine.Home"
         tools:showIn="@layout/activity_main">
 
 

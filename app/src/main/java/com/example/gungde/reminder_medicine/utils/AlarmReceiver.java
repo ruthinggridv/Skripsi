@@ -9,9 +9,7 @@ import android.media.RingtoneManager;
 import android.net.Uri;
 import android.support.v4.content.WakefulBroadcastReceiver;
 
-import com.example.gungde.reminder_medicine.MainActivity;
-
-import java.util.logging.Handler;
+import com.example.gungde.reminder_medicine.Home;
 
 /**
  * Created by macbookpro on 7/3/18.
@@ -20,7 +18,7 @@ import java.util.logging.Handler;
 public class AlarmReceiver extends WakefulBroadcastReceiver {
     @Override
     public void onReceive(final Context context, Intent intent) {
-        MainActivity inst = MainActivity.instance();
+        Home inst = Home.instance();
         Uri alarmUri = RingtoneManager.getDefaultUri(RingtoneManager.TYPE_ALARM);
         if (alarmUri == null) {
             alarmUri = RingtoneManager.getDefaultUri(RingtoneManager.TYPE_NOTIFICATION);

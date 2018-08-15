@@ -8,17 +8,8 @@ import android.content.Intent;
 import android.support.v4.app.NotificationCompat;
 import android.util.Log;
 
-import com.example.gungde.reminder_medicine.MainActivity;
 import com.example.gungde.reminder_medicine.Minumobat;
 import com.example.gungde.reminder_medicine.R;
-import com.example.gungde.reminder_medicine.Report;
-import com.example.gungde.reminder_medicine.model.DataObat;
-import com.example.gungde.reminder_medicine.model.ReportObat;
-import com.example.gungde.reminder_medicine.network.GetDataService;
-import com.example.gungde.reminder_medicine.network.RetrofitClientInstance;
-
-import retrofit2.Call;
-import retrofit2.Callback;
 
 /**
  * Created by macbookpro on 7/3/18.

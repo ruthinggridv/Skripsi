@@ -1,33 +1,18 @@
 <?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
+
 <FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
-    android:layout_height="match_parent"
+    android:layout_height="wrap_content"
+    android:id="@+id/main_frame"
     tools:context=".Beranda">
 
-    <LinearLayout
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:background="#ffffff"
-        android:orientation="vertical">
 
-        <android.support.v7.widget.Toolbar
-            android:id="@+id/toolbar"
-            style="@style/HeaderBar"
-            android:layout_width="match_parent"
-            android:layout_height="?android:attr/actionBarSize"
-            android:layout_alignParentTop="true"
-            android:elevation="4dp">
-
-            <TextView
-                android:id="@+id/nama"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_margin="14dp"
-                android:gravity="center_vertical"
-                android:textSize="20dp" />
-        </android.support.v7.widget.Toolbar>
 
         <android.support.v7.widget.RecyclerView
             android:id="@+id/listObat"
@@ -40,7 +25,7 @@
             app:layout_constraintTop_toTopOf="parent"
             app:layout_constraintVertical_bias="0.0" />
 
-    </LinearLayout>
+
 
     <ProgressBar
         android:id="@+id/prograss"
@@ -49,14 +34,36 @@
         android:layout_gravity="center"
         android:visibility="gone" />
 
+
+</FrameLayout>
+
     <android.support.design.widget.FloatingActionButton
         android:id="@+id/addfab"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_margin="8dp"
+        android:layout_alignParentBottom="true"
+        android:layout_alignParentEnd="true"
+
         android:layout_gravity="end|bottom"
+        android:layout_marginBottom="65dp"
+        android:layout_marginEnd="11dp"
         android:contentDescription="New reminder"
-        android:backgroundTint="#74bbf7"
         android:src="@drawable/maddfab"
-        app:fabSize="normal" />
-</FrameLayout>
+        app:fabSize="normal"
+        android:layout_alignParentRight="true"
+        android:layout_marginRight="11dp" />
+
+<android.support.design.widget.BottomNavigationView
+android:id="@+id/navigation"
+android:layout_width="match_parent"
+android:layout_height="wrap_content"
+android:layout_marginEnd="0dp"
+android:layout_marginStart="0dp"
+android:background="?android:attr/windowBackground"
+app:itemTextColor="@color/colorPrimary"
+app:itemIconTint="@color/colorPrimaryDark"
+
+android:layout_alignParentBottom="true"
+
+app:menu="@menu/navigation" />
+</RelativeLayout>
