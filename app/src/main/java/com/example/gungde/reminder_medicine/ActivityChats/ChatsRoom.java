@@ -621,7 +621,7 @@ public class ChatsRoom extends AppCompatActivity {
                     if (databaseError != null) {
                         Log.d("CHAT_LOG", databaseError.getMessage().toString());
                     }
-                    // loadMessages();
+
                 }
             });
         }
